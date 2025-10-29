@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio of Mahima Kushwaha, Web Developer Intern at Oasis Infobyte." />
+    <meta name="keywords" content="Mahima Kushwaha, Portfolio, Web Developer, React, Tailwind CSS" />
+    <title>Mahima Kushwaha | Web Developer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        cursor: none; /* Hide default cursor */
+      }
+      .font-mono {
+        font-family: 'Fira Code', monospace;
+      }
+      .font-signature {
+        font-family: 'Dancing Script', cursive;
+      }
+      /* Custom Cursor */
+      .custom-cursor {
+        position: fixed;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        will-change: transform;
+      }
+      .cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #f97316; /* orange-500 */
+        border-radius: 50%;
+      }
+      .cursor-outline {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #f97316; /* orange-500 */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.5;
+        transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+      }
+      .custom-cursor.is-interactive .cursor-outline {
+        width: 60px;
+        height: 60px;
+        opacity: 0.2;
+      }
+
+      /* Prevent animations on page load */
+      .preload * {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -ms-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+        animation: none !important;
+      }
+      
+      /* Preloader styles */
+      .preloader {
+        position: fixed;
+        inset: 0;
+        background-color: #000; /* bg-black */
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.75s ease, visibility 0.75s ease;
+      }
+      .preloader.is-loaded {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      @keyframes logo-pulse {
+        0%, 100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(0.95);
+        }
+      }
+      .animate-logo-pulse {
+        animation: logo-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      @keyframes text-pulse {
+        0%, 100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .animate-text-pulse {
+        animation: text-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      /* Entrance Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-up {
+        opacity: 0; /* Start hidden */
+        animation: fadeInUp 0.5s ease-out forwards;
+      }
+
+      /* Modal Animations */
+      @keyframes fadeInBackdrop {
+          from { background-color: rgba(18, 18, 18, 0); backdrop-filter: blur(0px); }
+          to { background-color: rgba(18, 18, 18, 0.7); backdrop-filter: blur(4px); }
+      }
+      @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+      }
+      @keyframes scaleOut {
+          from { opacity: 1; transform: scale(1); }
+          to { opacity: 0; transform: scale(0.95); }
+      }
+      .modal-backdrop-animate-in { animation: fadeInBackdrop 0.3s ease-out forwards; }
+      .modal-content-animate-in { animation: scaleIn 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+      .modal-content-animate-out { animation: scaleOut 0.2s ease-out forwards; }
+
+      /* Scroll-triggered animations */
+      .fade-up-on-scroll {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .fade-up-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Progress bar animation */
+      .progress-bar-inner {
+        width: 0%;
+        transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        transition-delay: 300ms;
+      }
+      .is-visible .progress-bar-inner {
+        width: var(--target-width);
+      }
+
+      /* Section title line animation */
+      .section-title-line {
+        display: block;
+        position: relative;
+      }
+      .section-title-line::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        left: 0;
+        height: 1px;
+        width: 100%;
+        background-color: #3f3f46; /* zinc-700 */
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        transition-delay: 250ms;
+      }
+      .is-visible .section-title-line::after {
+        transform: scaleX(1);
+      }
+
+      /* Glow effect for cards and buttons */
+      .glow-on-hover {
+        position: relative;
+        overflow: hidden;
+      }
+      .glow-on-hover:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(249, 115, 22, 0.2), transparent 30%);
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .glow-on-hover:hover:before {
+        opacity: 1;
+      }
+      
+      /* Hero Spotlight Effect */
+      #home {
+        position: relative;
+        background: radial-gradient(
+          800px circle at var(--x, 50%) var(--y, 50%),
+          rgba(249, 115, 22, 0.15), /* orange-500/15 */
+          transparent 40%
+        );
+        transition: background 0.2s ease-out;
+      }
+
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-black text-slate-300 preload">
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+    <script>
+      window.addEventListener('load', () => {
+        document.body.classList.remove('preload');
+      });
+      
+      const cursor = document.createElement('div');
+      cursor.className = 'custom-cursor';
+      cursor.innerHTML = '<div class="cursor-dot"></div><div class="cursor-outline"></div>';
+      document.body.appendChild(cursor);
+
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+
+      window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        document.documentElement.style.setProperty('--x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--y', e.clientY + 'px');
+      });
+
+      const updateCursor = () => {
+        cursorX += (mouseX - cursorX) * 0.12;
+        cursorY += (mouseY - cursorY) * 0.12;
+        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+        requestAnimationFrame(updateCursor);
+      };
+      
+      requestAnimationFrame(updateCursor);
+      
+      document.addEventListener('mouseover', e => {
+        if (e.target.closest('[data-interactive]')) {
+            cursor.classList.add('is-interactive');
+        }
+      });
+      
+      document.addEventListener('mouseout', e => {
+        if (e.target.closest('[data-interactive]')) {
+            cursor.classList.remove('is-interactive');
+        }
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        const interactiveElements = document.querySelectorAll('.glow-on-hover');
+        interactiveElements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            el.style.setProperty('--x', `${e.clientX - rect.left}px`);
+            el.style.setProperty('--y', `${e.clientY - rect.top}px`);
+        });
+      });
+    </script>
+  </body>
+</html>
